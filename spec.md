@@ -56,9 +56,12 @@ one-to-many with target-language tags, max_len 192.
   `Seq2SeqTrainingArguments`; if the probe early-stops, the cosine cycle is
   simply truncated — record the stop step).
 - bf16, max_grad_norm 1.0, seed 13 (single seed, matching `ie_base`).
-- **Batch**: per_device 256, grad-accum 1 → effective 256 sequences (~2.7×
+- **Batch**: per_device 128, grad-accum 2 → effective 256 sequences (~2.7×
   `ie_base`'s 96), chosen to cut wall time on the H100 at the cost of strict
-  comparability. OOM fallbacks: 192×1, then 128×2. Record actual peak memory.
+  comparability. (256×1 OOM'd on the 40 GB H100 at a long batch — the fp32
+  log-softmax over the 32k vocab; 128×2 keeps the same effective batch.
+  `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` is set on remote tasks
+  to curb fragmentation.) Record actual peak memory.
   Note: `max_tokens_per_batch` in the old configs was dead config (never read
   by `train.py`) and is omitted here.
 - **Probe machinery** (`probe.py`): held-out chrF3 probe every 1000 steps

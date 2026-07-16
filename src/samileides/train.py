@@ -63,7 +63,12 @@ def _maybe_clearml(
         # without installing it.
         task.set_base_docker(
             docker_image=docker_image or DEFAULT_DOCKER_IMAGE,
-            docker_arguments="-e PYTHONPATH=src",
+            docker_arguments=(
+                "-e PYTHONPATH=src "
+                # ie_big at batch 256 died with 5.6 GiB reserved-but-unallocated;
+                # expandable segments avoids that fragmentation on long batches.
+                "-e PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True"
+            ),
         )
         # Enqueue and exit locally; the agent reruns the whole script remotely.
         task.execute_remotely(queue_name=remote_queue, exit_process=True)

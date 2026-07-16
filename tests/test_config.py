@@ -42,8 +42,8 @@ def test_load_ie_big_config():
     assert cfg.training.lr_scheduler == "cosine"
     assert cfg.training.warmup_steps == 4000
     assert cfg.training.max_steps == 100000
-    assert cfg.training.per_device_batch_size == 256
-    assert cfg.training.gradient_accumulation == 1
+    assert cfg.training.per_device_batch_size == 128
+    assert cfg.training.gradient_accumulation == 2
     assert cfg.training.seed == 13
     assert cfg.probe is not None
     assert cfg.probe.every_steps == 1000
@@ -60,7 +60,7 @@ def test_load_ie_big_shareable_config():
     assert cfg.data.holdouts == "configs/holdouts-ie-shareable.yaml"
     assert cfg.model.d_model == 1024
     assert cfg.training.lr_scheduler == "cosine"
-    assert cfg.training.per_device_batch_size == 256
+    assert cfg.training.per_device_batch_size == 128
     assert cfg.probe is not None
 
 

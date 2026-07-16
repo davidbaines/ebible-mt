@@ -36,8 +36,8 @@ training:
   lr: 5.0e-4
   warmup_steps: 4000
   lr_scheduler: cosine          # decays to ~0 at max_steps (HF passthrough)
-  per_device_batch_size: 256    # keep effective batch identical to ie_big,
-  gradient_accumulation: 1      #   whether this runs on the H100 or the A100
+  per_device_batch_size: 128    # keep effective batch identical to ie_big
+  gradient_accumulation: 2      #   (256 seqs), whether on the H100 or the A100
   max_grad_norm: 1.0
   bf16: true
   max_steps: 100000             # ceiling; probe early-stopping usually ends sooner

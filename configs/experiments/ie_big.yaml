@@ -36,8 +36,9 @@ training:
   lr: 5.0e-4
   warmup_steps: 4000
   lr_scheduler: cosine          # decays to ~0 at max_steps (HF passthrough)
-  per_device_batch_size: 256    # H100 40 GB, grad-accum 1; effective 256 seqs,
-  gradient_accumulation: 1      #   ~2.7x ie_base's 96. OOM fallbacks: 192x1, 128x2.
+  per_device_batch_size: 128    # H100 40 GB: 256x1 OOMs on long batches (the
+  gradient_accumulation: 2      #   fp32 log-softmax over 32k vocab); 128x2
+                                #   keeps the effective 256 seqs (~2.7x ie_base's 96)
   max_grad_norm: 1.0
   bf16: true
   max_steps: 100000             # ceiling; probe early-stopping usually ends sooner
