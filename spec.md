@@ -116,6 +116,13 @@ as the base-scale record.
   `pytorch/pytorch:2.4.1-cuda12.4-cudnn9-runtime`, overridable via
   `--docker-image`) with `PYTHONPATH=src` so the src-layout package imports in
   the agent's clone without installation.
+- **Worker env facts** (learned closing the gate, 2026-07-16): the agents
+  resolve dependencies with **poetry**, which ignores `[tool.uv]` index pins
+  and skips optional extras — hence the train stack is a *default dependency
+  group* and the CUDA constraint lives in the version bound
+  (`torch>=2.4,<2.7`: the workers' driver supports exactly CUDA 12.4, and
+  torch 2.6.0 is the last PyPI release built on cu124; cu130/cu126 wheels fail
+  CUDA init there). Locally, uv additionally pins the cu124 wheel index.
 - Artifacts: the run dir is zipped and uploaded on completion
   (`_upload_artifacts`); retrieved with `python -m samileides.fetch --name
   <run>`. Generation + scoring run on the worker via `--generate-after`.

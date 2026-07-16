@@ -6,45 +6,46 @@ the Current status block current and tick tasks `[x]` as they are completed.
 
 ## Current status
 
-- **Done**: repo scaffolded 2026-07-16; planning interview completed 2026-07-16
-  (design in `spec.md`, decisions log there); licence check done (shareable
-  selection clean → cc-by-sa-4.0).
-- **Next**: vendor the samileides core and get the test suite green.
-- **Gate**: the ClearML `smoke_big` round trip on `jobs_backlog` must pass
-  before any real H100 run is enqueued.
+- **Done** (2026-07-16): planning interview; licence check (shareable selection
+  clean → cc-by-sa-4.0); samileides core vendored, 70 tests + 6 integration
+  green; 3090 smokes green; **ClearML round-trip gate passed** — `smoke_big`
+  trained on an H100 and its artifacts fetched back (task
+  `ceedae3b4b0c4b9483b34bbac4e9a280`). Took five attempts; fixes recorded in
+  spec.md "Worker env facts" (docker image, poetry not uv, torch<2.7/cu124).
+- **Next**: the real `ie_big` run on `jobs_backlog`.
 
 ## Tasks
 
 ### 1. Package scaffold
-- [ ] `pyproject.toml` (samileides 0.2.0, no `tabulate`, `train` extra, pytest
+- [x] `pyproject.toml` (samileides 0.2.0, no `tabulate`, `train` extra, pytest
       ini with `integration` marker) + `.python-version`.
-- [ ] `uv sync --extra train`; `uv run python -c "import samileides"` works.
+- [x] `uv sync --extra train`; `uv run python -c "import samileides"` works.
 
 ### 2. Vendor samileides core
-- [ ] Copy the 24 core modules verbatim into `src/samileides/`.
-- [ ] Copy tests (17 verbatim + adapted `test_config.py`).
-- [ ] Copy configs: `holdouts-ie.yaml`, `holdouts-ie-shareable.yaml`,
+- [x] Copy the 24 core modules verbatim into `src/samileides/`.
+- [x] Copy tests (17 verbatim + adapted `test_config.py`).
+- [x] Copy configs: `holdouts-ie.yaml`, `holdouts-ie-shareable.yaml`,
       `holdouts-smoke.yaml`, `language_families.csv`, `passages.yaml`,
       `families/indo_european.csv`, `configs/experiments/smoke.yaml`.
-- [ ] Copy selections: `selection-ie.csv`, `selection-ie-shareable.csv`,
+- [x] Copy selections: `selection-ie.csv`, `selection-ie-shareable.csv`,
       `selection-smoke.csv` into `experiments/`.
-- [ ] `uv run pytest` green (integration skipped by default).
-- [ ] One-off `uv run pytest -m integration` to confirm corpus access.
+- [x] `uv run pytest` green (integration skipped by default).
+- [x] One-off `uv run pytest -m integration` to confirm corpus access.
 
 ### 3. ClearML diff + experiment configs
-- [ ] `train.py`: project `ebible-mt`; `--docker-image` flag;
+- [x] `train.py`: project `ebible-mt`; `--docker-image` flag;
       `set_base_docker(..., docker_arguments="-e PYTHONPATH=src")` before
       `execute_remotely`.
-- [ ] `fetch.py`: project `ebible-mt`.
-- [ ] `configs/experiments/ie_big.yaml`, `ie_big_shareable.yaml`,
+- [x] `fetch.py`: project `ebible-mt`.
+- [x] `configs/experiments/ie_big.yaml`, `ie_big_shareable.yaml`,
       `smoke_big.yaml` (see spec for exact settings).
-- [ ] Adapted `test_config.py` asserts the new configs; pytest green.
+- [x] Adapted `test_config.py` asserts the new configs; pytest green.
 
 ### 4. Smokes
-- [ ] 3090: `smoke.yaml`, then `smoke_big.yaml --generate-after` — probe.csv,
+- [x] 3090: `smoke.yaml`, then `smoke_big.yaml --generate-after` — probe.csv,
       best checkpoint, generated Jonah scored, cosine LR visible in logs.
-- [ ] Commit + push (agents clone from GitHub).
-- [ ] **ClearML round-trip gate**: `smoke_big.yaml --clearml --remote-queue
+- [x] Commit + push (agents clone from GitHub).
+- [x] **ClearML round-trip gate**: `smoke_big.yaml --clearml --remote-queue
       jobs_backlog --generate-after`; `python -m samileides.fetch --name
       smoke_big`; artifacts inspected. Iterate `--docker-image` if bootstrap
       fails; escalate with `m2m_bible_mt/experiments/clearml-agent-issue.md`.
