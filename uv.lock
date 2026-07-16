@@ -2013,7 +2013,10 @@ dependencies = [
     { name = "sentencepiece" },
 ]
 
-[package.optional-dependencies]
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
 train = [
     { name = "accelerate" },
     { name = "clearml" },
@@ -2022,31 +2025,27 @@ train = [
     { name = "transformers" },
 ]
 
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-]
-
 [package.metadata]
 requires-dist = [
-    { name = "accelerate", marker = "extra == 'train'", specifier = ">=0.33" },
-    { name = "clearml", marker = "extra == 'train'", specifier = ">=1.16" },
     { name = "fsspec", specifier = ">=2024.6" },
     { name = "huggingface-hub", specifier = ">=0.30" },
-    { name = "matplotlib", marker = "extra == 'train'", specifier = ">=3.9" },
     { name = "pandas", specifier = ">=2.2" },
     { name = "protobuf", specifier = ">=7.35.1" },
     { name = "pyarrow", specifier = ">=16" },
     { name = "pyyaml", specifier = ">=6" },
     { name = "sacrebleu", specifier = ">=2.4" },
     { name = "sentencepiece", specifier = ">=0.2" },
-    { name = "torch", marker = "extra == 'train'", specifier = ">=2.4" },
-    { name = "transformers", marker = "extra == 'train'", specifier = ">=4.44" },
 ]
-provides-extras = ["train"]
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest", specifier = ">=8" }]
+train = [
+    { name = "accelerate", specifier = ">=0.33" },
+    { name = "clearml", specifier = ">=1.16" },
+    { name = "matplotlib", specifier = ">=3.9" },
+    { name = "torch", specifier = ">=2.4" },
+    { name = "transformers", specifier = ">=4.44" },
+]
 
 [[package]]
 name = "sentencepiece"

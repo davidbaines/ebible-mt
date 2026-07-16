@@ -15,8 +15,14 @@ dependencies = [
     "protobuf>=7.35.1",
 ]
 
-[project.optional-dependencies]
-# Training stack; install on the GPU boxes with `uv sync --extra train`.
+[dependency-groups]
+dev = [
+    "pytest>=8",
+]
+# Training stack. A default group (not an extra) so a plain `uv sync` installs
+# it — the ClearML agent runs exactly that on the workers, and an extra would
+# be silently skipped there (the smoke_big remote run failed on missing torch).
+# CPU-only data-prep boxes can opt out with `uv sync --no-group train`.
 train = [
     "torch>=2.4",
     "transformers>=4.44",
@@ -25,10 +31,8 @@ train = [
     "matplotlib>=3.9",
 ]
 
-[dependency-groups]
-dev = [
-    "pytest>=8",
-]
+[tool.uv]
+default-groups = ["dev", "train"]
 
 [build-system]
 requires = ["hatchling"]
