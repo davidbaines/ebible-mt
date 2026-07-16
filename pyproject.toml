@@ -34,16 +34,16 @@ train = [
 [tool.uv]
 default-groups = ["dev", "train"]
 
-# The jobs_backlog workers report agent.cuda_version = 124 (driver family
-# 12.x); PyPI's current torch ships CUDA 13 wheels, which that driver cannot
-# load ("Your setup doesn't support bf16/gpu"). Pin torch to the cu126 wheel
-# index — 12.x wheels run on any 12.x driver, and on the newer local box too.
+# The jobs_backlog workers have a driver supporting exactly CUDA 12.4
+# (torch reports "driver too old (found version 12040)" for both cu130 and
+# cu126 wheels). Pin torch to the cu124 wheel index — its newest build is
+# torch 2.6.0, which the newer local box also runs fine.
 [tool.uv.sources]
-torch = { index = "pytorch-cu126" }
+torch = { index = "pytorch-cu124" }
 
 [[tool.uv.index]]
-name = "pytorch-cu126"
-url = "https://download.pytorch.org/whl/cu126"
+name = "pytorch-cu124"
+url = "https://download.pytorch.org/whl/cu124"
 explicit = true
 
 [build-system]
