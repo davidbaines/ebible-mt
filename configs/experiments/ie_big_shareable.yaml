@@ -1,0 +1,60 @@
+# Publishable twin of ie_big (spec.md, "Runs"): the same transformer-big model
+# and schedule on the 32-language licence-clean Indo-European selection, with
+# Public Domain deutkw replacing by-nc-nd deuelbbk as the German holdout. Every
+# source is Public Domain or by-sa, so the trained model publishes to
+# DavidCBaines/ebible_m2m-ie-big-shareable under cc-by-sa-4.0 (licence and
+# quality gates in samileides.publish). Base-twin baseline: ie_base_shareable
+# chrF3 41.00 / 32.69 / 38.72 (eng / deu / hin).
+name: ie_big_shareable
+phase: one-to-many
+
+data:
+  selection: experiments/selection-ie-shareable.csv
+  holdouts: configs/holdouts-ie-shareable.yaml
+  source: greek
+  max_len: 192
+  max_ratio: 2.0
+
+tokenizer:
+  type: bpe
+  vocab_size: 32000
+
+model:                    # transformer-big (~210M)
+  arch: marian
+  encoder_layers: 6
+  decoder_layers: 6
+  d_model: 1024
+  encoder_attention_heads: 16
+  decoder_attention_heads: 16
+  encoder_ffn_dim: 4096
+  decoder_ffn_dim: 4096
+  dropout: 0.1
+  label_smoothing: 0.1
+
+training:
+  optimizer: adamw
+  lr: 5.0e-4
+  warmup_steps: 4000
+  lr_scheduler: cosine          # decays to ~0 at max_steps (HF passthrough)
+  per_device_batch_size: 256    # keep effective batch identical to ie_big,
+  gradient_accumulation: 1      #   whether this runs on the H100 or the A100
+  max_grad_norm: 1.0
+  bf16: true
+  max_steps: 100000             # ceiling; probe early-stopping usually ends sooner
+  eval_every_steps: 2000
+  seed: 13
+
+inference:
+  beam: 5
+  length_penalty: 1.0
+  max_length: 192
+
+probe:                          # held-out chrF3 curve + early stop + best checkpoint
+  every_steps: 1000
+  verses_per_language: 250
+  min_gain: 1.0
+  patience_steps: 20000
+  batch_size: 64
+  seed: 13
+
+oversample_holdouts: 1
