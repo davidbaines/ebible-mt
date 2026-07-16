@@ -1932,7 +1932,7 @@ train = [
     { name = "accelerate", specifier = ">=0.33" },
     { name = "clearml", specifier = ">=1.16" },
     { name = "matplotlib", specifier = ">=3.9" },
-    { name = "torch", specifier = ">=2.4", index = "https://download.pytorch.org/whl/cu124" },
+    { name = "torch", specifier = ">=2.4,<2.7", index = "https://download.pytorch.org/whl/cu124" },
     { name = "transformers", specifier = ">=4.44" },
 ]
 

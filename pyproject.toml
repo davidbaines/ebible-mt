@@ -19,12 +19,16 @@ dependencies = [
 dev = [
     "pytest>=8",
 ]
-# Training stack. A default group (not an extra) so a plain `uv sync` installs
-# it — the ClearML agent runs exactly that on the workers, and an extra would
-# be silently skipped there (the smoke_big remote run failed on missing torch).
-# CPU-only data-prep boxes can opt out with `uv sync --no-group train`.
+# Training stack. A default group (not an extra) so the ClearML agents install
+# it — their poetry env setup skips extras (the first remote smoke_big failed on
+# missing torch). CPU-only data-prep boxes can opt out with `--no-group train`.
+# torch is capped below 2.7: the jobs_backlog workers' driver supports exactly
+# CUDA 12.4 and torch 2.6.0 is the last PyPI release built on cu124 — newer
+# wheels fail CUDA init there ("driver too old (found version 12040)"). The
+# agents use poetry, which ignores [tool.uv] index pins, so the constraint must
+# live here in the version bound.
 train = [
-    "torch>=2.4",
+    "torch>=2.4,<2.7",
     "transformers>=4.44",
     "accelerate>=0.33",
     "clearml>=1.16",
