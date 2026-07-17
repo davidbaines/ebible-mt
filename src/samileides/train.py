@@ -84,10 +84,18 @@ def _upload_artifacts(output: Path) -> None:
     task = Task.current_task()
     if task is None:
         return
-    # Upload the whole run directory (model, tokeniser, config, summary, and any
-    # generated artefacts) as one zipped artifact, plus register the weights as
-    # a model so it is easy to find in the UI.
-    task.upload_artifact("run", artifact_object=str(output))
+    # Upload the run directory minus intermediate trainer checkpoints:
+    # checkpoint-*/ dirs carry optimizer states (~2.4 GB each at big scale) and
+    # the full 5.95 GB ie_big zip hit ENOSPC on the file server, losing the
+    # whole artifact. The final model, best/, tokenizer, probe curve and
+    # generated books all survive the filter. Staged copy is temporary, so the
+    # upload must complete before it is deleted.
+    import tempfile
+
+    with tempfile.TemporaryDirectory() as tmp:
+        staged = Path(tmp) / output.name
+        shutil.copytree(output, staged, ignore=shutil.ignore_patterns("checkpoint-*"))
+        task.upload_artifact("run", artifact_object=str(staged), wait_on_upload=True)
     print(f"  uploaded run artifacts to ClearML task {task.id}")
 
 

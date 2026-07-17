@@ -164,6 +164,11 @@ aggregate scores and curves only, never the model or generated text.
 
 - 2026-07-16 — Repo `ebible-mt` created; series scoped from `m2m_bible_mt`'s
   roadmap.
+- 2026-07-17 — `ie_big` complete: chrF3 48.06/48.43/43.99 eng/deu/hin
+  (+5.9 to +7.9 over ie_base). 87k steps (early stop), 8.04 h H100. The run
+  artifact was lost to a full ClearML file server (ENOSPC) — chrF3 recovered
+  from the console log; artifact upload now excludes intermediate
+  checkpoints, and smoke artifacts were deleted server-side to free space.
 - 2026-07-16 — Planning interview: vendor samileides core-only; run both twins
   (`ie_big`, `ie_big_shareable`); defer `vref_ie_big`; schedule tuned for big
   (5e-4 peak, cosine over 100k, probe stopping) rather than matched;

@@ -12,7 +12,13 @@ the Current status block current and tick tasks `[x]` as they are completed.
   trained on an H100 and its artifacts fetched back (task
   `ceedae3b4b0c4b9483b34bbac4e9a280`). Took five attempts; fixes recorded in
   spec.md "Worker env facts" (docker image, poetry not uv, torch<2.7/cu124).
-- **Next**: the real `ie_big` run on `jobs_backlog`.
+- **Done** (2026-07-17): **`ie_big` trained and scored** — held-out whole-OT
+  chrF3 **48.06 / 48.43 / 43.99** (eng/deu/hin) vs ie_base 40.73/40.51/38.08:
+  **+5.9 to +7.9**. 87k steps (early stop; best probe 47.36 @ 85k), 8.04 h on
+  one H100. Results: `experiments/ie-big-results.md`. Caveat: the run artifact
+  (weights, spBLEU/BLEU) was lost to a full file server (ENOSPC); chrF3
+  recovered from the console log; mitigations in place (see results doc).
+- **Next**: `ie_big_shareable` on `jobs_backlog`.
 
 ## Tasks
 
@@ -51,10 +57,10 @@ the Current status block current and tick tasks `[x]` as they are completed.
       fails; escalate with `m2m_bible_mt/experiments/clearml-agent-issue.md`.
 
 ### 5. Runs
-- [ ] `ie_big` on H100 (`--generate-after`); monitor probe curve; OOM
-      fallbacks 192×1 then 128×2; fetch; record peak memory, stop step,
-      wall time.
-- [ ] `experiments/ie-big-results.md` — beside `ie_base` 40.73/40.51/38.08,
+- [x] `ie_big` on H100 (`--generate-after`); 256×1 OOM'd → 128×2; early stop
+      87k, best 85k, 8.04 h. Artifact upload failed (server ENOSPC) — scores
+      recovered from console; weights not retained (research-only anyway).
+- [x] `experiments/ie-big-results.md` — beside `ie_base` 40.73/40.51/38.08,
       probe curve, schedule-framing caveat.
 - [ ] `ie_big_shareable` (H100 or A100; effective batch stays 256); fetch.
 - [ ] `experiments/ie-big-shareable-results.md` — beside `ie_base_shareable`
