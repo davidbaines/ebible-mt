@@ -18,7 +18,14 @@ the Current status block current and tick tasks `[x]` as they are completed.
   one H100. Results: `experiments/ie-big-results.md`. Caveat: the run artifact
   (weights, spBLEU/BLEU) was lost to a full file server (ENOSPC); chrF3
   recovered from the console log; mitigations in place (see results doc).
-- **Next**: `ie_big_shareable` on `jobs_backlog`.
+- **Done** (2026-07-17): **`ie_big_shareable` trained, scored and published**
+  — chrF3 **47.01 / 37.03 / 43.82** (eng/deutkw/hin) vs base twin
+  41.00/32.69/38.72: **+4.3 to +6.0**. Best probe 42.52 @ 72k, 6.86 h H100;
+  trimmed 1.56 GB artifact uploaded and fetched cleanly. Published:
+  https://huggingface.co/DavidCBaines/ebible_m2m-ie-big-shareable
+  (cc-by-sa-4.0). Results: `experiments/ie-big-shareable-results.md`.
+- **Series question answered**: transformer-big + tuned longer schedule is
+  worth +4 to +8 chrF3 over base at matched data/holdouts, on both selections.
 
 ## Tasks
 
@@ -62,15 +69,14 @@ the Current status block current and tick tasks `[x]` as they are completed.
       recovered from console; weights not retained (research-only anyway).
 - [x] `experiments/ie-big-results.md` — beside `ie_base` 40.73/40.51/38.08,
       probe curve, schedule-framing caveat.
-- [ ] `ie_big_shareable` (H100 or A100; effective batch stays 256); fetch.
-- [ ] `experiments/ie-big-shareable-results.md` — beside `ie_base_shareable`
+- [x] `ie_big_shareable` (H100; effective batch 256); fetched (1.56 GB).
+- [x] `experiments/ie-big-shareable-results.md` — beside `ie_base_shareable`
       41.00/32.69/38.72.
 
 ### 6. Publish + wrap up
-- [ ] `publish --run checkpoints/ie_big_shareable --dry-run`; inspect staging.
-- [ ] Push to `DavidCBaines/ebible_m2m-ie-big-shareable` (cc-by-sa-4.0) —
-      or scores/write-up/code only if the quality gate fails (record the
-      decision in spec.md).
+- [x] `publish --run checkpoints/ie_big_shareable --dry-run`; staging inspected.
+- [x] Pushed to `DavidCBaines/ebible_m2m-ie-big-shareable` (cc-by-sa-4.0);
+      both gates passed.
 - [ ] Final spec.md decisions-log entries; README; memory note on the outcome.
 
 ## Reference

@@ -164,6 +164,11 @@ aggregate scores and curves only, never the model or generated text.
 
 - 2026-07-16 — Repo `ebible-mt` created; series scoped from `m2m_bible_mt`'s
   roadmap.
+- 2026-07-17 — `ie_big_shareable` complete and **published** to
+  `DavidCBaines/ebible_m2m-ie-big-shareable` (cc-by-sa-4.0): chrF3
+  47.01/37.03/43.82 eng/deutkw/hin (+4.3 to +6.0 over the base twin). Best
+  probe 42.52 @ 72k, 6.86 h H100. Trimmed artifact upload worked (1.56 GB).
+  Series question answered: big + tuned schedule ≈ +4 to +8 chrF3.
 - 2026-07-17 — `ie_big` complete: chrF3 48.06/48.43/43.99 eng/deu/hin
   (+5.9 to +7.9 over ie_base). 87k steps (early stop), 8.04 h H100. The run
   artifact was lost to a full ClearML file server (ENOSPC) — chrF3 recovered
